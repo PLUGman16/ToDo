@@ -1,5 +1,5 @@
 let state = {
-    todo: []
+    todo: ['1', '2']
 }
 
 export default state
