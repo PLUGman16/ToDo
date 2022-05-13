@@ -1,18 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from './Todo.module.css'
 
 
-
 const ToDo = (props) => {
-    let [state, setState] = useState(props.state)
-    let [style, setStyle] = useState({
-        transform: 'scale(1)'
-    })
-    /*let [state, setState] = useState({
-        todo: ['1', '2', '3']
-    })*/
+    let [state, setState] = useState(
+        {
+            todo: JSON.parse(localStorage.getItem('state')) || props.state.todo
+        }
+    )
     let input = ''
-
     const handleInput = (elem) => {
         input = elem.target.value
 
@@ -30,13 +26,11 @@ const ToDo = (props) => {
             )
         }
 
+        localStorage.setItem('state', JSON.stringify(state.todo))
+
         e.target.reset()
     }
     const handleDelete = (index) => {
-        //Надо добавить таймер срабатывания + добавить срабатывание только на нажимаемом объекте
-        //setStyle({
-        //    transform: 'scale(0.5)'
-        //})
         const elem = state.todo
         elem.splice(index, 1)
         setState(
@@ -44,9 +38,8 @@ const ToDo = (props) => {
                 todo: elem
             }
         )
-        
 
-
+        localStorage.setItem('state', JSON.stringify(elem))
     }
     
     return (
@@ -61,7 +54,7 @@ const ToDo = (props) => {
                 {
                 state.todo.map((e, index) => {
                     return(
-                        <li /*style={style}*/ onClick={() => handleDelete(index)} key={index} className={styles.todoItem}>
+                        <li onClick={() => handleDelete(index)} key={index} className={styles.todoItem}>
                             {e}
                         </li>
                     )
